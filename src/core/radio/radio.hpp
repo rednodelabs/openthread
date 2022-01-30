@@ -654,6 +654,27 @@ public:
                 ((kChannelMin == aCslChannel) || ((kChannelMin < aCslChannel) && (aCslChannel <= kChannelMax))));
     }
 
+    /**
+     * This method gets the radio RNL RedNodeBus version.
+     *
+     * @returns A pointer to the OpenThread radio RNL RedNodeBus version.
+     *
+     */
+    const char *RnlRnbGetVersion(void);
+
+    /**
+     * This method sends a RNL RedNodeBus association response.
+     *
+     * @param[in] rnbRequest         rnbRequest.
+     * @param[in] rnbRequestLength   rnbRequestLength.
+     *
+     * @retval kErrorNone            Successfully updated the RNL RedNodeBus schema.
+     * @retval kErrorInvalidArgs     Input arguments are not valid.
+     * @retval kErrorNotImplemented  Not Implemented.
+     *
+     */
+    Error RnlRnbSendRequest(const otRadioRnlRnbRequest &rnbRequest, uint16_t rnbRequestLength);
+
 private:
     otInstance *GetInstancePtr(void) { return reinterpret_cast<otInstance *>(&InstanceLocator::GetInstance()); }
 
