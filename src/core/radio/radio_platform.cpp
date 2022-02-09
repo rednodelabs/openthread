@@ -307,3 +307,19 @@ OT_TOOL_WEAK otError otPlatRadioReceiveAt(otInstance *aInstance, uint8_t aChanne
 
     return kErrorNotImplemented;
 }
+
+OT_TOOL_WEAK const char *otPlatRadioRnlRnbGetVersion(otInstance *aInstance)
+{
+    OT_UNUSED_VARIABLE(aInstance);
+
+    return nullptr;
+}
+
+OT_TOOL_WEAK Error otPlatRadioRnlRnbSendRequest(otInstance *aInstance, const otRadioRnlRnbRequest *rnbRequest, uint16_t rnbRequestLength)
+{
+    OT_UNUSED_VARIABLE(aInstance);
+    OT_UNUSED_VARIABLE(rnbRequest);
+    OT_UNUSED_VARIABLE(rnbRequestLength);
+
+    return kErrorNotImplemented;
+}

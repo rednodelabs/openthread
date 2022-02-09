@@ -769,6 +769,38 @@ public:
     otError SetChannelMaxTransmitPower(uint8_t aChannel, int8_t aPower);
 
     /**
+     * This method returns the radio RNL RedNodeBus sw version.
+     *
+     * @returns A pointer to the radio RNL RedNodeBus sw version.
+     *
+     */
+    const char *RnlRnbGetVersion(void) const { return mRnlRnbVersion; }
+
+    /**
+     * This method sends a RNL RedNodeBus request.
+     *
+     * @param[in]  rnbRequest           rnbRequest.
+     * @param[in]  rnbRequestLength     rnbRequestLength.
+     *
+     * @retval  OT_ERROR_NONE           Successfully accepted association request.
+     * @retval  OT_ERROR_INVALID_ARGS   Invalid input arguments.
+     *
+     */
+    otError RnlRnbSendRequest(const otRadioRnlRnbRequest &rnbRequest, uint16_t rnbRequestLength);
+
+    /**
+     * This method gets the pending RNL RedNodeBus event.
+     *
+     * @param[in]  rnbEvent             rnbEvent.
+     *
+     * @retval  OT_ERROR_NONE           Successfully returned valued.
+     * @retval  OT_ERROR_INVALID_ARGS   Invalid input arguments.
+     * @retval  OT_ERROR_FAILED         No pending rnbEvent.
+     *
+     */
+    otError RnlRnbGetEvent(otRadioRnlRnbEvent &rnbEvent);
+
+    /**
      * This method tries to retrieve a spinel property from OpenThread transceiver.
      *
      * @param[in]   aKey        Spinel property key.
@@ -858,11 +890,14 @@ public:
 private:
     enum
     {
-        kMaxSpinelFrame        = SpinelInterface::kMaxFrameSize,
-        kMaxWaitTime           = 2000, ///< Max time to wait for response in milliseconds.
-        kVersionStringSize     = 128,  ///< Max size of version string.
-        kCapsBufferSize        = 100,  ///< Max buffer size used to store `SPINEL_PROP_CAPS` value.
-        kChannelMaskBufferSize = 32,   ///< Max buffer size used to store `SPINEL_PROP_PHY_CHAN_SUPPORTED` value.
+        kMaxSpinelFrame          = SpinelInterface::kMaxFrameSize,
+        kMaxWaitTime             = 2000, ///< Max time to wait for response in milliseconds.
+        kVersionStringSize       = 128,  ///< Max size of version string.
+        kRnlRnbVersionStringSize = 128,  ///< Max size of RNL RedNodeBus version string.
+        kRnlRnbEventTriggerSize  = 1,    ///< Min number of RNL RedNodeBusevents to generate pending signal.
+        kRnlRnbEventBufferSize   = 32,   ///< Max number of pending RNL RedNodeBus events.
+        kCapsBufferSize          = 100,  ///< Max buffer size used to store `SPINEL_PROP_CAPS` value.
+        kChannelMaskBufferSize   = 32,   ///< Max buffer size used to store `SPINEL_PROP_PHY_CHAN_SUPPORTED` value.
     };
 
     enum State
@@ -993,7 +1028,13 @@ private:
     int8_t       mRxSensitivity;
     otError      mTxError;
     char         mVersion[kVersionStringSize];
+    char         mRnlRnbVersion[kRnlRnbVersionStringSize];
     otExtAddress mIeeeEui64;
+
+    uint8_t             mPendingRnlRnbEvents;
+    uint8_t             mRnlRnbEventsReadIndex;
+    uint8_t             mRnlRnbEventsWriteIndex;
+    otRadioRnlRnbEvent  mRnlRnbEvents[kRnlRnbEventBufferSize];
 
     State mState;
     bool  mIsPromiscuous : 1;     ///< Promiscuous mode.

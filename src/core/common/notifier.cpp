@@ -210,7 +210,7 @@ exit:
 
 // LCOV_EXCL_START
 
-#if (OPENTHREAD_CONFIG_LOG_LEVEL >= OT_LOG_LEVEL_INFO) && (OPENTHREAD_CONFIG_LOG_CORE == 1)
+#if (OPENTHREAD_CONFIG_LOG_LEVEL >= OT_LOG_LEVEL_DEBG) && (OPENTHREAD_CONFIG_LOG_CORE == 1)
 
 void Notifier::LogEvents(Events aEvents) const
 {
@@ -227,7 +227,7 @@ void Notifier::LogEvents(Events aEvents) const
         {
             if (string.GetLength() >= kFlagsStringLineLimit)
             {
-                otLogInfoCore("Notifier: StateChanged (0x%08x) %s%s ...", aEvents.GetAsFlags(), didLog ? "... " : "[",
+                otLogDebgCore("Notifier: StateChanged (0x%08x) %s%s ...", aEvents.GetAsFlags(), didLog ? "... " : "[",
                               string.AsCString());
                 string.Clear();
                 didLog   = true;
@@ -242,7 +242,7 @@ void Notifier::LogEvents(Events aEvents) const
     }
 
 exit:
-    otLogInfoCore("Notifier: StateChanged (0x%08x) %s%s]", aEvents.GetAsFlags(), didLog ? "... " : "[",
+    otLogDebgCore("Notifier: StateChanged (0x%08x) %s%s]", aEvents.GetAsFlags(), didLog ? "... " : "[",
                   string.AsCString());
 }
 
@@ -284,6 +284,7 @@ const char *Notifier::EventToString(Event aEvent) const
         "JoinerState",       // kEventJoinerStateChanged               (1 << 27)
         "ActDset",           // kEventActiveDatasetChanged             (1 << 28)
         "PndDset",           // kEventPendingDatasetChanged            (1 << 29)
+        "PndRnlRnbEvent",    // kEventPendingRnlRnbEvent               (1 << 30)
     };
 
     for (uint8_t index = 0; index < OT_ARRAY_LENGTH(kEventStrings); index++)

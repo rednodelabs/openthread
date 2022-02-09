@@ -71,6 +71,7 @@
 #if OPENTHREAD_CONFIG_COAP_SECURE_API_ENABLE
 #include "cli/cli_coap_secure.hpp"
 #endif
+#include "cli/cli_rnl_rnb.hpp"
 
 #include "common/code_utils.hpp"
 #include "common/debug.hpp"
@@ -108,6 +109,7 @@ class Interpreter : public Output
     friend class NetworkData;
     friend class SrpClient;
 #endif
+    friend class RnlRnb;
     friend void otCliPlatLogv(otLogLevel, otLogRegion, const char *, va_list);
     friend void otCliPlatLogLine(otLogLevel, otLogRegion, const char *);
     friend void otCliAppendResult(otError aError);
@@ -564,6 +566,7 @@ private:
 #if OPENTHREAD_CONFIG_RADIO_LINK_TREL_ENABLE
     otError ProcessTrel(Arg aArgs[]);
 #endif
+    otError ProcessRnlRnb(Arg aArgs[]);
 #if OPENTHREAD_FTD && OPENTHREAD_CONFIG_REFERENCE_DEVICE_ENABLE
     otError ProcessRouterIdRange(Arg *aArgs);
 #endif
@@ -826,6 +829,7 @@ private:
         {"reset", &Interpreter::ProcessReset},
 #if OPENTHREAD_FTD || OPENTHREAD_MTD
         {"rloc16", &Interpreter::ProcessRloc16},
+        {"rnb", &Interpreter::ProcessRnlRnb},
 #if OPENTHREAD_CONFIG_BORDER_ROUTER_ENABLE
         {"route", &Interpreter::ProcessRoute},
 #endif
@@ -925,6 +929,8 @@ private:
 #if OPENTHREAD_CONFIG_TMF_ANYCAST_LOCATOR_ENABLE
     bool mLocateInProgress : 1;
 #endif
+
+    RnlRnb  mRnlRnb;
 };
 
 // Specializations of `FormatStringFor<ValueType>()`

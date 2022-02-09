@@ -139,6 +139,7 @@ Interpreter::Interpreter(Instance *aInstance, otCliOutputCallback aCallback, voi
     , mLocateInProgress(false)
 #endif
 #endif // OPENTHREAD_FTD || OPENTHREAD_MTD
+    , mRnlRnb(*this)
 {
 #if OPENTHREAD_FTD
     otThreadSetDiscoveryRequestCallback(GetInstancePtr(), &Interpreter::HandleDiscoveryRequest, this);
@@ -264,6 +265,11 @@ otError Interpreter::ProcessReset(Arg aArgs[])
     otInstanceReset(GetInstancePtr());
 
     return OT_ERROR_NONE;
+}
+
+otError Interpreter::ProcessRnlRnb(Arg aArgs[])
+{
+    return mRnlRnb.Process(aArgs);
 }
 
 void Interpreter::ProcessLine(char *aBuf)

@@ -68,3 +68,5 @@ cmake-build-*/**
 
 # Python bytecodes
 __pycache__
+
+*.patch
