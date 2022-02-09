@@ -95,6 +95,7 @@ enum Event : uint32_t
     kEventJoinerStateChanged               = OT_CHANGED_JOINER_STATE,                 ///< Joiner state changed
     kEventActiveDatasetChanged             = OT_CHANGED_ACTIVE_DATASET,               ///< Active Dataset changed
     kEventPendingDatasetChanged            = OT_CHANGED_PENDING_DATASET,              ///< Pending Dataset changed
+    kEventPendingRnlRnbEvent               = OT_CHANGED_PENDING_RNL_RNB_EVENT,        ///< Pending RNL RedNodeBus Event
 };
 
 /**

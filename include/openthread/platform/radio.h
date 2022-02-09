@@ -393,6 +393,28 @@ typedef struct otLinkMetrics
     bool mReserved : 1;   ///< Reserved, this is for reference device.
 } otLinkMetrics;
 
+#define OT_RADIO_RNL_RNB_REQUEST_MAX_SIZE   128   ///< Max size of the RNL RedNodeBus Request in bytes.
+#define OT_RADIO_RNL_RNB_EVENT_MAX_SIZE     320   ///< Max size of the RNL RedNodeBus Event in bytes.
+
+/**
+ * This structure represents a RNL RedNodeBus request.
+ *
+ */
+typedef struct otRadioRnlRnbRequest
+{
+    uint8_t mRnbRequest[OT_RADIO_RNL_RNB_REQUEST_MAX_SIZE]; ///< RNL RedNodeBus request bytes
+} otRadioRnlRnbRequest;
+
+/**
+ * This structure represents a RNL RedNodeBus event.
+ *
+ */
+typedef struct otRadioRnlRnbEvent
+{
+    uint16_t mRnbEventLength;
+    uint8_t mRnbEvent[OT_RADIO_RNL_RNB_EVENT_MAX_SIZE]; ///< RNL RedNodeBus event bytes
+} otRadioRnlRnbEvent;
+
 /**
  * @}
  *
@@ -1140,6 +1162,43 @@ otError otPlatRadioConfigureEnhAckProbing(otInstance *        aInstance,
                                           otLinkMetrics       aLinkMetrics,
                                           otShortAddress      aShortAddress,
                                           const otExtAddress *aExtAddress);
+
+/**
+ * Get the radio RNL RedNodeBus version.
+ *
+ * @param[in]  aInstance   The OpenThread instance structure.
+ *
+ * @returns A pointer to the OpenThread radio RNL RedNodeBus version.
+ *
+ */
+const char *otPlatRadioRnlRnbGetVersion(otInstance *aInstance);
+
+/**
+ * OpenThread calls this method to send a RedNodeBus request.
+ *
+ * @param[in]  aInstance            The OpenThread instance structure.
+ * @param[in]  rnbRequest           The RedNodeBus request instance structure.
+ * @param[in]  rnbRequestLength     Length of the RedNodeBus request.
+ *
+ * @retval  OT_ERROR_INVALID_ARGS   @p rnbEvent is nullptr.
+ * @retval  OT_ERROR_FAILED         Other platform specific errors.
+ * @retval  OT_ERROR_NONE           Successfully got RedNodeBus event.
+ *
+ */
+otError otPlatRadioRnlRnbSendRequest(otInstance *aInstance, const otRadioRnlRnbRequest *rnbRequest, uint16_t rnbRequestLength);
+
+/**
+ * OpenThread calls this method to get the last RedNodeBus event.
+ *
+ * @param[in]   aInstance           The OpenThread instance structure.
+ * @param[out]  rnbEvent            The pending RedBodeBus event.
+ *
+ * @retval  OT_ERROR_INVALID_ARGS   @p rnbEvent is nullptr.
+ * @retval  OT_ERROR_FAILED         Other platform specific errors.
+ * @retval  OT_ERROR_NONE           Successfully got RedNodeBus event.
+ *
+ */
+otError otPlatRadioRnlRnbGetEvent(otInstance *aInstance, otRadioRnlRnbEvent *rnbEvent);
 
 /**
  * @}
