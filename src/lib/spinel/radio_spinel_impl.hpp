@@ -847,24 +847,27 @@ void RadioSpinel<InterfaceType, ProcessContextType>::HandleValueIs(spinel_prop_k
 
         VerifyOrExit(unpacked > 0, error = OT_ERROR_PARSE);
 
-        mRnlRnbEvents[mRnlRnbEventsWriteIndex].mRnbEventLength = len;
-
-        mRnlRnbEventsWriteIndex = (mRnlRnbEventsWriteIndex + 1) % kRnlRnbEventBufferSize;
-
-        if (mRnlRnbEventsWriteIndex == mRnlRnbEventsReadIndex)
+        if (mInstance != nullptr)
         {
-            mRnlRnbEventsReadIndex = (mRnlRnbEventsReadIndex + 1) % kRnlRnbEventBufferSize;
+            mRnlRnbEvents[mRnlRnbEventsWriteIndex].mRnbEventLength = len;
 
-            otLogCritPlat("RNL RedNodeBus events buffer overflow. w: %u, r: %u", mRnlRnbEventsWriteIndex, mRnlRnbEventsReadIndex);
-        }
-        else
-        {
-            mPendingRnlRnbEvents++;
-        }
+            mRnlRnbEventsWriteIndex = (mRnlRnbEventsWriteIndex + 1) % kRnlRnbEventBufferSize;
 
-        if (mPendingRnlRnbEvents >= kRnlRnbEventTriggerSize)
-        {
-            static_cast<Instance *>(mInstance)->template Get<Notifier>().Signal(kEventPendingRnlRnbEvent);
+            if (mRnlRnbEventsWriteIndex == mRnlRnbEventsReadIndex)
+            {
+                mRnlRnbEventsReadIndex = (mRnlRnbEventsReadIndex + 1) % kRnlRnbEventBufferSize;
+
+                otLogCritPlat("RNL RedNodeBus events buffer overflow. w: %u, r: %u", mRnlRnbEventsWriteIndex, mRnlRnbEventsReadIndex);
+            }
+            else
+            {
+                mPendingRnlRnbEvents++;
+            }
+
+            if (mPendingRnlRnbEvents >= kRnlRnbEventTriggerSize)
+            {
+                static_cast<Instance *>(mInstance)->template Get<Notifier>().Signal(kEventPendingRnlRnbEvent);
+            }
         }
     }
     else if (aKey == SPINEL_PROP_STREAM_RAW)
