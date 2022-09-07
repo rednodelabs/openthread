@@ -69,7 +69,7 @@
 #endif
 
 #ifndef TX_WAIT_US
-#define TX_WAIT_US (5 * US_PER_S)
+#define TX_WAIT_US (4000 * US_PER_S)
 #endif
 
 #ifndef RCP_TIME_OFFSET_CHECK_INTERVAL
