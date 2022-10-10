@@ -895,7 +895,7 @@ private:
         kVersionStringSize       = 128,  ///< Max size of version string.
         kRnlRnbVersionStringSize = 128,  ///< Max size of RNL RedNodeBus version string.
         kRnlRnbEventTriggerSize  = 1,    ///< Min number of RNL RedNodeBusevents to generate pending signal.
-        kRnlRnbEventBufferSize   = 32,   ///< Max number of pending RNL RedNodeBus events.
+        kRnlRnbEventBufferSize   = 255,   ///< Max number of pending RNL RedNodeBus events.
         kCapsBufferSize          = 100,  ///< Max buffer size used to store `SPINEL_PROP_CAPS` value.
         kChannelMaskBufferSize   = 32,   ///< Max buffer size used to store `SPINEL_PROP_PHY_CHAN_SUPPORTED` value.
     };
