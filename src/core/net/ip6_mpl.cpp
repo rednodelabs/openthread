@@ -100,7 +100,7 @@ Error Mpl::ProcessOption(Message &aMessage, const Address &aAddress, bool aIsOut
     if (error == kErrorNone)
     {
 #if OPENTHREAD_FTD
-        AddBufferedMessage(aMessage, option.GetSeedId(), option.GetSequence(), aIsOutbound);
+        //AddBufferedMessage(aMessage, option.GetSeedId(), option.GetSequence(), aIsOutbound);
 #endif
     }
     else if (aIsOutbound)

@@ -832,7 +832,7 @@ protected:
         kReattachPending, ///< Reattach using stored Pending Dataset
     };
 
-    static constexpr uint16_t kMleMaxResponseDelay = 1000u; ///< Max delay before responding to a multicast request.
+    static constexpr uint16_t kMleMaxResponseDelay = 50u; ///< Max delay before responding to a multicast request.
 
     /**
      * This enumeration type is used in `AppendAddressRegistrationTlv()` to determine which addresses to include in the

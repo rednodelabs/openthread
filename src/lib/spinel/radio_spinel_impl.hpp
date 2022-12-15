@@ -69,7 +69,7 @@
 #endif
 
 #ifndef TX_WAIT_US
-#define TX_WAIT_US (5 * US_PER_S)
+#define TX_WAIT_US (15 * US_PER_S)
 #endif
 
 #ifndef RCP_TIME_OFFSET_CHECK_INTERVAL
@@ -219,6 +219,10 @@ RadioSpinel<InterfaceType, ProcessContextType>::RadioSpinel(void)
 {
     mVersion[0] = '\0';
     memset(&mRadioSpinelMetrics, 0, sizeof(mRadioSpinelMetrics));
+    mRnlRnbVersion[0] = '\0';
+    mPendingRnlRnbEvents = 0;
+    mRnlRnbEventsReadIndex = 0;
+    mRnlRnbEventsWriteIndex = 0;
 }
 
 template <typename InterfaceType, typename ProcessContextType>
@@ -252,6 +256,7 @@ void RadioSpinel<InterfaceType, ProcessContextType>::Init(bool aResetRadio,
 
     SuccessOrExit(error = CheckSpinelVersion());
     SuccessOrExit(error = Get(SPINEL_PROP_NCP_VERSION, SPINEL_DATATYPE_UTF8_S, mVersion, sizeof(mVersion)));
+    SuccessOrExit(error = Get(SPINEL_PROP_VENDOR_RNL_RNB_COPROCESSOR_VERSION, SPINEL_DATATYPE_UTF8_S, mRnlRnbVersion, sizeof(mRnlRnbVersion)));
     SuccessOrExit(error = Get(SPINEL_PROP_HWADDR, SPINEL_DATATYPE_EUI64_S, mIeeeEui64.m8));
 
     if (!IsRcp(supportsRcpApiVersion))
@@ -847,7 +852,39 @@ void RadioSpinel<InterfaceType, ProcessContextType>::HandleValueIs(spinel_prop_k
     otError        error = OT_ERROR_NONE;
     spinel_ssize_t unpacked;
 
-    if (aKey == SPINEL_PROP_STREAM_RAW)
+    if (aKey == SPINEL_PROP_VENDOR_RNL_RNB_EVENT)
+    {
+        unsigned int len = OT_RADIO_RNL_RNB_EVENT_MAX_SIZE;
+        assert(aLength <= len);
+
+        unpacked = spinel_datatype_unpack_in_place(aBuffer, aLength, SPINEL_DATATYPE_DATA_S, mRnlRnbEvents[mRnlRnbEventsWriteIndex].mRnbEvent, &len);
+
+        VerifyOrExit(unpacked > 0, error = OT_ERROR_PARSE);
+
+        if (mInstance != nullptr)
+        {
+            mRnlRnbEvents[mRnlRnbEventsWriteIndex].mRnbEventLength = len;
+
+            mRnlRnbEventsWriteIndex = (mRnlRnbEventsWriteIndex + 1) % kRnlRnbEventBufferSize;
+
+            if (mRnlRnbEventsWriteIndex == mRnlRnbEventsReadIndex)
+            {
+                mRnlRnbEventsReadIndex = (mRnlRnbEventsReadIndex + 1) % kRnlRnbEventBufferSize;
+
+                otLogCritPlat("RNL RedNodeBus events buffer overflow. w: %u, r: %u", mRnlRnbEventsWriteIndex, mRnlRnbEventsReadIndex);
+            }
+            else
+            {
+                mPendingRnlRnbEvents++;
+            }
+
+            if (mPendingRnlRnbEvents >= kRnlRnbEventTriggerSize)
+            {
+                static_cast<Instance *>(mInstance)->template Get<Notifier>().Signal(kEventPendingRnlRnbEvent);
+            }
+        }
+    }
+    else if (aKey == SPINEL_PROP_STREAM_RAW)
     {
         SuccessOrExit(error = ParseRadioFrame(mRxRadioFrame, aBuffer, aLength, unpacked));
         RadioReceive();
@@ -2508,6 +2545,45 @@ uint8_t RadioSpinel<InterfaceType, ProcessContextType>::GetCslUncertainty(void)
     return uncertainty;
 }
 #endif
+
+template <typename InterfaceType, typename ProcessContextType>
+otError RadioSpinel<InterfaceType, ProcessContextType>::RnlRnbSendRequest(const otRadioRnlRnbRequest &rnbRequest, uint16_t rnbRequestLength)
+{
+    spinel_size_t length = static_cast<spinel_size_t>(rnbRequestLength);
+
+    otError error;
+
+    error = Request(SPINEL_CMD_VENDOR_RNL_RNB_SEND_REQUEST, SPINEL_PROP_VENDOR_RNL_RNB_REQUEST,
+                    SPINEL_DATATYPE_DATA_WLEN_S,
+                    (&rnbRequest)->mRnbRequest, length);
+
+    return error;
+}
+
+template <typename InterfaceType, typename ProcessContextType>
+otError RadioSpinel<InterfaceType, ProcessContextType>::RnlRnbGetEvent(otRadioRnlRnbEvent &rnbEvent)
+{
+    otError error;
+
+    if (mPendingRnlRnbEvents)
+    {
+        (&rnbEvent)->mRnbEventLength = mRnlRnbEvents[mRnlRnbEventsReadIndex].mRnbEventLength;
+
+        memcpy((&rnbEvent)->mRnbEvent, mRnlRnbEvents[mRnlRnbEventsReadIndex].mRnbEvent, (&rnbEvent)->mRnbEventLength);
+
+        mPendingRnlRnbEvents--;
+
+        mRnlRnbEventsReadIndex = (mRnlRnbEventsReadIndex + 1) % kRnlRnbEventBufferSize;
+
+        error = OT_ERROR_NONE;
+    }
+    else
+    {
+        error = OT_ERROR_FAILED;
+    }
+
+    return error;
+}
 
 } // namespace Spinel
 } // namespace ot

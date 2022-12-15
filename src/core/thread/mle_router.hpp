@@ -580,9 +580,9 @@ public:
     void SendAddressRelease(Coap::ResponseHandler aResponseHandler = nullptr, void *aResponseHandlerContext = nullptr);
 
 private:
-    static constexpr uint16_t kDiscoveryMaxJitter            = 250;  // Max jitter delay Discovery Responses (in msec).
+    static constexpr uint16_t kDiscoveryMaxJitter            = 50;  // Max jitter delay Discovery Responses (in msec).
     static constexpr uint32_t kStateUpdatePeriod             = 1000; // State update period (in msec).
-    static constexpr uint16_t kUnsolicitedDataResponseJitter = 500;  // Max delay for unsol Data Response (in msec).
+    static constexpr uint16_t kUnsolicitedDataResponseJitter = 50;  // Max delay for unsol Data Response (in msec).
 
     // Threshold to accept a router upgrade request with reason
     // `kBorderRouterRequest` (number of BRs acting as router in

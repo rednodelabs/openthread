@@ -84,23 +84,24 @@ constexpr uint16_t kUdpPort       = 19788;                            ///< MLE U
  * MLE Protocol delays and timeouts.
  *
  */
-constexpr uint32_t kParentRequestRouterTimeout     = 750;  ///< Router Parent Request timeout (in msec)
-constexpr uint32_t kParentRequestDuplicateMargin   = 50;   ///< Margin for duplicate parent request
-constexpr uint32_t kParentRequestReedTimeout       = 1250; ///< Router and REEDs Parent Request timeout (in msec)
+constexpr uint32_t kParentRequestRouterTimeout     = 5000;  ///< Router Parent Request timeout (in msec)
+constexpr uint32_t kParentRequestDuplicateMargin   = 2500;   ///< Margin for duplicate parent request
+constexpr uint32_t kParentRequestReedTimeout       = 5000; ///< Router and REEDs Parent Request timeout (in msec)
 constexpr uint32_t kAttachStartJitter              = 50;   ///< Max jitter time added to start of attach (in msec)
 constexpr uint32_t kAnnounceProcessTimeout         = 250;  ///< Delay after Announce rx before channel/pan-id change
 constexpr uint32_t kAnnounceTimeout                = 1400; ///< Total timeout for sending Announce messages (in msec)
 constexpr uint32_t kMinAnnounceDelay               = 80;   ///< Min delay between Announcement messages (in msec)
-constexpr uint32_t kParentResponseMaxDelayRouters  = 500;  ///< Max response delay for Parent Req to routers (in msec)
-constexpr uint32_t kParentResponseMaxDelayAll      = 1000; ///< Max response delay for Parent Req to all (in msec)
-constexpr uint32_t kUnicastRetransmissionDelay     = 1000; ///< Base delay before an MLE unicast retx (in msec)
+constexpr uint32_t kParentResponseMaxDelayRouters  = 50;  ///< Max response delay for Parent Req to routers (in msec)
+constexpr uint32_t kParentResponseMaxDelayAll      = 50; ///< Max response delay for Parent Req to all (in msec)
+constexpr uint32_t kUnicastRetransmissionDelay     = 15000; ///< Base delay before an MLE unicast retx (in msec)
 constexpr uint32_t kChildUpdateRequestPendingDelay = 100;  ///< Delay for aggregating Child Update Req (in msec)
 constexpr uint8_t  kMaxTransmissionCount           = 3;    ///< Max number of times an MLE message may be transmitted
-constexpr uint32_t kMaxResponseDelay               = 1000; ///< Max response delay for a multicast request (in msec)
-constexpr uint32_t kMaxChildIdRequestTimeout       = 5000; ///< Max delay to rx a Child ID Request (in msec)
-constexpr uint32_t kMaxChildUpdateResponseTimeout  = 2000; ///< Max delay to rx a Child Update Response (in msec)
-constexpr uint32_t kMaxLinkRequestTimeout          = 2000; ///< Max delay to rx a Link Accept
+constexpr uint32_t kMaxResponseDelay               = 15000; ///< Max response delay for a multicast request (in msec)
+constexpr uint32_t kMaxChildIdRequestTimeout       = 15000; ///< Max delay to rx a Child ID Request (in msec)
+constexpr uint32_t kMaxChildUpdateResponseTimeout  = 15000; ///< Max delay to rx a Child Update Response (in msec)
+constexpr uint32_t kMaxLinkRequestTimeout          = 15000; ///< Max delay to rx a Link Accept
 constexpr uint8_t  kMulticastLinkRequestDelay      = 5;    ///< Max delay for sending a mcast Link Request (in sec)
+constexpr uint32_t kMaxDelayMle                    = 50; 
 
 constexpr uint32_t kMinTimeoutKeepAlive = (((kMaxChildKeepAliveAttempts + 1) * kUnicastRetransmissionDelay) / 1000);
 constexpr uint32_t kMinPollPeriod       = OPENTHREAD_CONFIG_MAC_MINIMUM_POLL_PERIOD;

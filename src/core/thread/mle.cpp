@@ -705,7 +705,7 @@ void Mle::SetStateChild(uint16_t aRloc16)
 #endif
 
     // send announce after attached if needed
-    InformPreviousChannel();
+    //InformPreviousChannel();
 
 #if OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE
     UpdateParentSearchState();
@@ -1398,7 +1398,7 @@ void Mle::HandleAttachTimer(void)
     if (HasAcceptableParentCandidate() && (SendChildIdRequest() == kErrorNone))
     {
         SetAttachState(kAttachStateChildIdRequest);
-        delay = kParentRequestReedTimeout;
+        delay = kMaxChildUpdateResponseTimeout;
         ExitNow();
     }
 
@@ -1482,7 +1482,7 @@ exit:
 bool Mle::PrepareAnnounceState(void)
 {
     bool             shouldAnnounce = false;
-    Mac::ChannelMask channelMask;
+ /*   Mac::ChannelMask channelMask;
 
     VerifyOrExit(!IsChild() && (mReattachState == kReattachStop) &&
                  (Get<MeshCoP::ActiveDatasetManager>().IsPartiallyComplete() || !IsFullThreadDevice()));
@@ -1501,7 +1501,7 @@ bool Mle::PrepareAnnounceState(void)
 
     shouldAnnounce = true;
 
-exit:
+exit:*/
     return shouldAnnounce;
 }
 
