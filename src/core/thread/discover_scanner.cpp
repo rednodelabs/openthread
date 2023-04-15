@@ -273,10 +273,10 @@ void DiscoverScanner::HandleTimer(void)
     // frame tx is aborted  from `PrepareDiscoveryRequestFrame()` and
     // then wraps up the scan (invoking handler callback).
 
-    if (mScanChannels.GetNextChannel(mScanChannel) != kErrorNone)
-    {
+    //if (mScanChannels.GetNextChannel(mScanChannel) != kErrorNone)
+    //{
         mState = kStateScanDone;
-    }
+    //}
 
     Get<MeshForwarder>().ResumeMessageTransmissions();
 
