@@ -741,7 +741,7 @@ void Mle::SetStateChild(uint16_t aRloc16)
 #endif
 
     // send announce after attached if needed
-    InformPreviousChannel();
+    // InformPreviousChannel();
 
 #if OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE
     mParentSearch.UpdateState();
@@ -1531,26 +1531,26 @@ exit:
 bool Mle::PrepareAnnounceState(void)
 {
     bool             shouldAnnounce = false;
-    Mac::ChannelMask channelMask;
+//     Mac::ChannelMask channelMask;
 
-    VerifyOrExit(!IsChild() && (mReattachState == kReattachStop) &&
-                 (Get<MeshCoP::ActiveDatasetManager>().IsPartiallyComplete() || !IsFullThreadDevice()));
+//     VerifyOrExit(!IsChild() && (mReattachState == kReattachStop) &&
+//                  (Get<MeshCoP::ActiveDatasetManager>().IsPartiallyComplete() || !IsFullThreadDevice()));
 
-    if (Get<MeshCoP::ActiveDatasetManager>().GetChannelMask(channelMask) != kErrorNone)
-    {
-        channelMask = Get<Mac::Mac>().GetSupportedChannelMask();
-    }
+//     if (Get<MeshCoP::ActiveDatasetManager>().GetChannelMask(channelMask) != kErrorNone)
+//     {
+//         channelMask = Get<Mac::Mac>().GetSupportedChannelMask();
+//     }
 
-    mAnnounceDelay = kAnnounceTimeout / (channelMask.GetNumberOfChannels() + 1);
+//     mAnnounceDelay = kAnnounceTimeout / (channelMask.GetNumberOfChannels() + 1);
 
-    if (mAnnounceDelay < kMinAnnounceDelay)
-    {
-        mAnnounceDelay = kMinAnnounceDelay;
-    }
+//     if (mAnnounceDelay < kMinAnnounceDelay)
+//     {
+//         mAnnounceDelay = kMinAnnounceDelay;
+//     }
 
-    shouldAnnounce = true;
+//     shouldAnnounce = true;
 
-exit:
+// exit:
     return shouldAnnounce;
 }
 

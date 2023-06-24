@@ -908,3 +908,23 @@ const otRcpInterfaceMetrics *otSysGetRcpInterfaceMetrics(void)
 {
     return sRadioSpinel.GetSpinelInterface().GetRcpInterfaceMetrics();
 }
+
+const char *otPlatRadioRnlRnbGetVersion(otInstance *aInstance)
+{
+    OT_UNUSED_VARIABLE(aInstance);
+    return sRadioSpinel.RnlRnbGetVersion();
+}
+
+otError otPlatRadioRnlRnbSendRequest(otInstance                 *aInstance,
+                                     const otRadioRnlRnbRequest *rnbRequest,
+                                     uint16_t                    rnbRequestLength)
+{
+    OT_UNUSED_VARIABLE(aInstance);
+    return sRadioSpinel.RnlRnbSendRequest(*rnbRequest, rnbRequestLength);
+}
+
+otError otPlatRadioRnlRnbGetEvent(otInstance *aInstance, otRadioRnlRnbEvent *rnbEvent)
+{
+    OT_UNUSED_VARIABLE(aInstance);
+    return sRadioSpinel.RnlRnbGetEvent(*rnbEvent);
+}

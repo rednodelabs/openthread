@@ -122,7 +122,7 @@ Error Mpl::ProcessOption(Message &aMessage, uint16_t aOffset, const Address &aAd
     if (error == kErrorNone)
     {
 #if OPENTHREAD_FTD
-        AddBufferedMessage(aMessage, option.GetSeedId(), option.GetSequence(), aIsOutbound);
+        // AddBufferedMessage(aMessage, option.GetSeedId(), option.GetSequence(), aIsOutbound);
 #endif
     }
     else if (aIsOutbound)

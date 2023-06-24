@@ -774,7 +774,7 @@ Error MleRouter::SendLinkAccept(const Ip6::MessageInfo &aMessageInfo,
     if (aMessageInfo.GetSockAddr().IsMulticast())
     {
         SuccessOrExit(error = message->SendAfterDelay(aMessageInfo.GetPeerAddr(),
-                                                      1 + Random::NonCrypto::GetUint16InRange(0, kMaxResponseDelay)));
+                                                      1 + Random::NonCrypto::GetUint16InRange(0, kMaxDelayMle)));
 
         Log(kMessageDelay, (command == kCommandLinkAccept) ? kTypeLinkAccept : kTypeLinkAcceptAndRequest,
             aMessageInfo.GetPeerAddr());

@@ -122,7 +122,7 @@ void Notifier::EmitEvents(void)
     events = mEventsToSignal;
     mEventsToSignal.Clear();
 
-    LogEvents(events);
+    // LogEvents(events);
 
     // Emit events to core internal modules
 
